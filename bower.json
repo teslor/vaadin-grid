@@ -29,7 +29,7 @@
   ],
   "devDependencies": {
     "web-component-tester": "^4.3.1",
-    "iron-test-helpers": "^1.2.5",
+    "iron-test-helpers": "^1.4.0",
     "paper-input": "^1.1.17",
     "paper-checkbox": "^1.4.0",
     "iron-demo-helpers": "^1.2.5",

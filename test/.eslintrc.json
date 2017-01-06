@@ -5,6 +5,7 @@
   "globals": {
     "WCT": false,
     "HTMLImports": false,
+    "MockInteractions": false,
     "sinon": false,
     "suite": false,
     "suiteSetup": false,

@@ -109,51 +109,6 @@
 
       describe('passtrough pointer events', function() {
 
-        function move(x, y) {
-          makeMouseEvent('mousemove', {x: x, y: y}, scroller);
-        }
-
-        var HAS_NEW_MOUSE = (function() {
-          var has = false;
-          try {
-            has = Boolean(new MouseEvent('x'));
-          } catch (_) {
-            // continue regardless of error
-          }
-          return has;
-        })();
-
-        function makeMouseEvent(type, xy, node) {
-          var props = {
-            bubbles: true,
-            cancelable: true,
-            clientX: xy.x,
-            clientY: xy.y,
-            // Make this a primary input.
-            buttons: 1 // http://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
-          };
-          var e;
-          if (HAS_NEW_MOUSE) {
-            e = new MouseEvent(type, props);
-          } else {
-            e = document.createEvent('MouseEvent');
-            e.initMouseEvent(
-              type, props.bubbles, props.cancelable,
-              null, /* view */
-              null, /* detail */
-              0,    /* screenX */
-              0,    /* screenY */
-              props.clientX, props.clientY,
-              false, /* ctrlKey */
-              false, /* altKey */
-              false, /* shiftKey */
-              false, /* metaKey */
-              0,     /* button */
-              null   /* relatedTarget*/);
-          }
-          node.dispatchEvent(e);
-        }
-
         function outerScrollerInUse() {
           return window.getComputedStyle(outerScroller).pointerEvents !== 'none';
         }
@@ -164,7 +119,7 @@
             done();
           });
 
-          move(1, 1);
+          MockInteractions.makeMouseEvent('mousemove', {x: 1, y: 1}, scroller);
         });
 
         it('should not passtrough if and only if scrollbars exist (vertical scrollbar hover)', function(done) {
@@ -172,7 +127,7 @@
             expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
             done();
           });
-          move(tableRect.width, 1);
+          MockInteractions.makeMouseEvent('mousemove', {x: tableRect.width, y: 1}, scroller);
         });
 
         it('should not passtrough if and only if scrollbars exist (horizontal scrollbar hover)', function(done) {
@@ -183,7 +138,7 @@
             }
             done();
           });
-          move(1, tableRect.height);
+          MockInteractions.makeMouseEvent('mousemove', {x: 1, y: tableRect.height}, scroller);
         });
 
       });
