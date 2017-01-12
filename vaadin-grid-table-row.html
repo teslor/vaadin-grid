@@ -101,7 +101,14 @@
       _rowDetailsCellIndexChanged: function(_rowDetailsCell, index, target) {
         if (_rowDetailsCell) {
           _rowDetailsCell.index = index;
-          this.style.paddingBottom = _rowDetailsCell.style.height = _rowDetailsCell.clientHeight + 'px';
+          this.updateRowDetailsCellSpace();
+        }
+      },
+
+      updateRowDetailsCellSpace: function() {
+        if (this._rowDetailsCell) {
+          this._rowDetailsCell.style.height = ''; // Reset previous height
+          this.style.paddingBottom = this._rowDetailsCell.style.height = this._rowDetailsCell.clientHeight + 'px';
         }
       },
 

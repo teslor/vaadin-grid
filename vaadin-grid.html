@@ -143,6 +143,10 @@ Custom property | Description | Default
       'property-changed': '_columnPropChanged'
     },
 
+    notifyResize: function() {
+      this.$.scroller.notifyResizeInternal();
+    },
+
     _updateItem: function(row, item) {
       row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
       row.item = item;

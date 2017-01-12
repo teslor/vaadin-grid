@@ -295,6 +295,13 @@
       'copy': '_onCopy'
     },
 
+    notifyResizeInternal: function() {
+      this._physicalItems.forEach(function(row) {
+        row.updateRowDetailsCellSpace();
+      });
+      this.notifyResize();
+    },
+
     _columnPropChanged: function(e) {
       if (e.detail.path === 'headerTemplate') {
         this.toggleAttribute('has-templates', true, this.$.header);
