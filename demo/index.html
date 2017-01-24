@@ -45,28 +45,38 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
 
-          <vaadin-grid data-source="[[dataSource]]" size="200">
-            <vaadin-grid-column width="50px">
-              <template class="header">#</template>
-              <template>[[index]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="50px">
-              <template class="header"></template>
-              <template>
-                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
-              </template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="calc(50% - 100px)">
-              <template class="header">First Name</template>
-              <template>[[item.user.name.first]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="calc(50% - 100px)">
-              <template class="header">Last Name</template>
-              <template>[[item.user.name.last]]</template>
-            </vaadin-grid-column>
-          </vaadin-grid>
+          <vaadin-grid id="grid9"><vaadin-grid-column><template class='header'>Id</template><template>[[item.id]]</template></vaadin-grid-column><vaadin-grid-column><template class='header'>First Name</template><template>[[item.firstName]]</template></vaadin-grid-column><vaadin-grid-column><template class='header'>Last Name</template><template>[[item.lastName]]</template></vaadin-grid-column></vaadin-grid><script>grid9.size=993;
+          grid9.data=[{"id":"2","firstName":"Troy","lastName":"Smith"},{"id":"3","firstName":"Violet","lastName":"Avery"},{"id":"4","firstName":"Isaac","lastName":"Fry"},{"id":"5","firstName":"Daphne","lastName":"Lawson"},{"id":"6","firstName":"Zachary","lastName":"Short"},{"id":"7","firstName":"Ruby","lastName":"Oneill"},{"id":"8","firstName":"Vladimir","lastName":"Garcia"},{"id":"9","firstName":"Whoopi","lastName":"Ferguson"},{"id":"11","firstName":"Carissa","lastName":"Santos"},{"id":"12","firstName":"Felix","lastName":"Hammond"},{"id":"13","firstName":"Gwendolyn","lastName":"Cotton"},{"id":"14","firstName":"Orlando","lastName":"Carey"},{"id":"15","firstName":"Emma","lastName":"Richard"},{"id":"16","firstName":"Alisa","lastName":"Bruce"},{"id":"17","firstName":"Quynn","lastName":"Joyce"},{"id":"18","firstName":"Joseph","lastName":"Tucker"},{"id":"19","firstName":"Drew","lastName":"Walter"},{"id":"20","firstName":"Macon","lastName":"Harmon"},{"id":"21","firstName":"Jaquelyn","lastName":"Murray"},{"id":"22","firstName":"Mason","lastName":"Mayo"},{"id":"23","firstName":"Felicia","lastName":"Levy"},{"id":"24","firstName":"Suki","lastName":"Hoover"},{"id":"25","firstName":"Herrod","lastName":"Pugh"},{"id":"26","firstName":"Jamalia","lastName":"Greene"},{"id":"27","firstName":"Tashya","lastName":"Espinoza"},{"id":"28","firstName":"Deanna","lastName":"Campbell"},{"id":"29","firstName":"Boris","lastName":"Sloan"},{"id":"30","firstName":"Drew","lastName":"Pugh"},{"id":"31","firstName":"Xandra","lastName":"Gill"},{"id":"32","firstName":"Asher","lastName":"Anthony"},{"id":"33","firstName":"Malcolm","lastName":"Estes"},{"id":"34","firstName":"Conan","lastName":"Acevedo"},{"id":"35","firstName":"Lacey","lastName":"Hamilton"},{"id":"36","firstName":"Kerry","lastName":"Townsend"},{"id":"37","firstName":"Nichole","lastName":"Bolton"},{"id":"38","firstName":"Noelle","lastName":"Salas"},{"id":"39","firstName":"Zachary","lastName":"Woodard"},{"id":"40","firstName":"Rachel","lastName":"Coffey"},{"id":"41","firstName":"Xenos","lastName":"Hurley"},{"id":"42","firstName":"Baker","lastName":"Clayton"},{"id":"43","firstName":"Ivan","lastName":"Blankenship"},{"id":"44","firstName":"Mariko","lastName":"Key"},{"id":"45","firstName":"Alden","lastName":"Rollins"},{"id":"46","firstName":"Lucas","lastName":"Stanley"},{"id":"47","firstName":"Ciara","lastName":"Madden"},{"id":"48","firstName":"Ginger","lastName":"Booth"},{"id":"49","firstName":"Cara","lastName":"Mcintyre"},{"id":"50","firstName":"Octavius","lastName":"Butler"},{"id":"51","firstName":"Glenna","lastName":"Schroeder"},{"id":"52","firstName":"Hector","lastName":"Tyson"}];grid9.dataSource = function(params, callback) {
+             var fetch = function(first, last, data, callback) {
+                 console.log("Fetching "+first+"-"+last);
+                 var url = "http://localhost:3000/offset"+first;
+                 var xhr = new XMLHttpRequest();
+                 xhr.onreadystatechange = function() {
+                   if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                     var response = JSON.parse(xhr.responseText);
+                     data.push.apply(data, response);
+                     callback();
+                   }
+                 }
+              xhr.open('GET', url, true);
+              xhr.send();
+             };
+
+             var firstRequested = params.pageSize * params.page;
+             var lastRequested = firstRequested + params.pageSize - 1;
+             var grid = this;
+             var lastAvailable = grid.data.length-1;
+             if (lastRequested > lastAvailable) {
+               fetch(lastAvailable+1, lastRequested, grid.data, function() {
+                  callback(grid.data.slice(firstRequested, firstRequested + params.pageSize));
+               });
+             } else {
+               callback(grid.data.slice(firstRequested, firstRequested + params.pageSize));
+             }
+          };
+          </script>
+
         </template>
       </template>
     </demo-snippet>
